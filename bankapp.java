@@ -5,13 +5,31 @@ public class BankApp {
         Scanner scanner = new Scanner(System.in);
         Bank bank = new Bank();
 
+        System.out.println("1. Login");
+        System.out.println("2. Register");
+        System.out.print("Choose option: ");
+        int authChoice = scanner.nextInt();
+        scanner.nextLine(); // Consume newline
+
         System.out.print("Enter username: ");
         String username = scanner.nextLine();
 
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
-        if (bank.login(username, password)) {
+        boolean isAuthenticated = false;
+        if (authChoice == 2) {
+            if (bank.register(username, password)) {
+                System.out.println("User registered successfully.");
+                isAuthenticated = bank.login(username, password);
+            } else {
+                System.out.println("Registration failed. Username may already exist.");
+            }
+        } else {
+            isAuthenticated = bank.login(username, password);
+        }
+
+        if (isAuthenticated) {
             int choice;
             do {
                 System.out.println("\nWelcome " + username);
@@ -19,9 +37,12 @@ public class BankApp {
                 System.out.println("2. Deposit Money");
                 System.out.println("3. Withdraw Money");
                 System.out.println("4. View Transactions");
-                System.out.println("5. Exit");
+                System.out.println("5. Transfer Money");
+                System.out.println("6. Change Password");
+                System.out.println("7. Exit");
                 System.out.print("Choose an option: ");
                 choice = scanner.nextInt();
+                scanner.nextLine(); // consume newline
 
                 switch (choice) {
                     case 1 -> bank.showBalance();
@@ -34,10 +55,22 @@ public class BankApp {
                         bank.withdraw(scanner.nextDouble());
                     }
                     case 4 -> bank.viewTransactions();
-                    case 5 -> System.out.println("Thank you for using our service.");
+                    case 5 -> {
+                        System.out.print("Enter beneficiary username: ");
+                        String target = scanner.nextLine();
+                        System.out.print("Enter amount to transfer: ");
+                        double amount = scanner.nextDouble();
+                        bank.transfer(target, amount);
+                    }
+                    case 6 -> {
+                         System.out.print("Enter new password: ");
+                         String newPass = scanner.nextLine();
+                         bank.changePassword(newPass);
+                    }
+                    case 7 -> System.out.println("Thank you for using our service.");
                     default -> System.out.println("Invalid option.");
                 }
-            } while (choice != 5);
+            } while (choice != 7);
         } else {
             System.out.println("Invalid credentials!");
         }
