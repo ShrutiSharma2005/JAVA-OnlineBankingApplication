@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.event.*;
 
-public class LoginForm extends JFrame {
+public class gui extends JFrame {
     JTextField userField;
     JPasswordField passField;
     JButton loginBtn;
 
-    public LoginForm() {
+    public gui() {
         setTitle("Bank Login");
         setSize(300, 150);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
